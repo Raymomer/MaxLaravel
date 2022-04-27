@@ -6,7 +6,7 @@
 
  $ composer install  
 
- phpmyadmin create a table names  laravel and Enter "$ php artisan migrate"
+ phpmyadmin create a db names  laravel and Enter "$ php artisan migrate"
 
  php artisan serve 
 
