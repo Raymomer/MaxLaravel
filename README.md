@@ -1,11 +1,11 @@
 ## Install Step
 
-# $ git clone [url]
+ $ git clone [url]
 
-# copy .env.example to .env and change DB_LOCATION
+ copy .env.example to .env and change DB_LOCATION
 
-# $ composer install  
+ $ composer install  
 
-# phpmyadmin create a table names  laravel and Enter "$ php artisan migrate"
+ phpmyadmin create a table names  laravel and Enter "$ php artisan migrate"
 
-# php artisan serve 
+ php artisan serve 
