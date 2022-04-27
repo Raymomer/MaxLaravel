@@ -38,7 +38,3 @@ Route::post('/Max/api/user/create', 'UserController@userCreate');
 Route::post('/Max/api/user/update', 'UserController@userUpdate');
 Route::post('/Max/api/user/login', 'UserController@index');
 
-// Route::post('/Max/api/user/create', function () {
-
-//     return "九天玄女駕到";
-// });
