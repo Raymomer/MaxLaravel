@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\User;
 
+
 class UserController extends Controller
 {
+    use \App\Http\Traits\UsesUuid;
 
     public function login(Request $request)
     {
-
-        response("cookie")->cookie('token', '九天玄女');
-        dd("500英尺");
+        // response("cookie")->cookie('token', '九天玄女');
+        // dd("500英尺");
     }
 
 
@@ -25,14 +27,13 @@ class UserController extends Controller
          *  add upgrade models
          *  set token 
          */
+        $uuid = Str::uuid()->toString();
 
         $user = new User;
 
         $user->user_account = 'ray';
         $user->user_password = 'aa1234';
-        $user->user_id = date(time());
-        // $user->update_at = date(time());
-
+        $user->token = $uuid;
 
         $user->save();
 
@@ -46,18 +47,16 @@ class UserController extends Controller
         $user = new User;
         // Contest::query()
 
-        $user->where('user_account', 'ray')->update(['user_password' => 'aa1234']);
+        $user->where('user_account', 'ray')->update(['user_password' => '123123']);
         echo 'Updatesuccess';
     }
 
-
-
-    public function index(Request $request)
+    public function userLogin(Request $request)
     {
-        $response = response("cookie")->cookie('token', '九天玄女');
+        $user = new User;
+        // Contest::query()
 
-
-        dd($request->cookie('token'));
-        // dd(response()->cookie('token'));
+        dd($user->where('user_account', 'ray')->where('user_password', '123123')->get()->toArray());
     }
+
 }
