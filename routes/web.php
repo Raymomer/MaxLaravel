@@ -36,7 +36,8 @@ Route::get('/Max/login', 'UserController@login');
 
 Route::post('/Max/api/user/create', 'UserController@userCreate');
 Route::post('/Max/api/user/update', 'UserController@userUpdate');
+Route::post('/Max/api/user/profile', 'UserController@userProfile');
 Route::post('/Max/api/user/login', 'UserController@userLogin');
+Route::post('/Max/api/user/logout', 'UserController@userLogout');
 
 // Route::post('/Max/api/user/login', 'UserController@index');
-

@@ -10,11 +10,8 @@ class User extends Model
     use HasFactory;
 
     protected $table = "users";
-    protected $primaryKey = 'user_account';
-    public $incrementing = false;
 
-
-    protected $fillable = ['user_account', 'user_password', 'user_id', 'expire'];
+    protected $fillable = ['user_account', 'user_password', 'user_mail', 'expire'];
 
     protected $hidden = [
         'user_password',
