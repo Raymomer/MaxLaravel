@@ -12,9 +12,6 @@ class UserController extends Controller
 {
     use \App\Http\Traits\UsesUuid;
 
-    public function login(Request $request)
-    {
-    }
 
 
     public function userCreate(Request $request)
@@ -62,7 +59,6 @@ class UserController extends Controller
             'password',
             'mail',
             'expiry',
-            'refreshToken',      // true or false
         ]);
 
 
@@ -79,11 +75,6 @@ class UserController extends Controller
                 case 'expiry':
                     $payload['expiry'] = $value;
                     break;
-                    // case 'refreshToken':
-                    //     if ($request->boolean('refreshToken')) {
-                    //         $payload['token'] = Str::uuid()->toString();
-                    //     }
-                    //     break;
             };
         };
 
@@ -169,8 +160,6 @@ class UserController extends Controller
     {
 
         request()->validate([
-            'account',
-            'password',
             'token'
 
         ]);
@@ -188,24 +177,10 @@ class UserController extends Controller
             }
         }
 
-
-        // User must be hold account and password
-        else if ($request->input('account') != null && $request->input('password') != null) {
-
-            $userInfo = [
-                'account' => $request->input('account'),
-                'password' => $request->input('password')
-            ];
-
-            $check = $this->checkUserExist($userInfo);
-            if ($check != null)
-                $verifyUser = true;
-        }
-
         if ($verifyUser) {
             return response()->json(['status' => true, 'payload' => $check], 200);
         } else {
-            return $this->error(400, "Verify user faild");
+            return $this->error(400, "User have not login or no account.");
         }
     }
 
@@ -242,7 +217,7 @@ class UserController extends Controller
         return $users;
     }
 
-    public static function error($code = 400, $message = 'error_occured')
+    public static  function error($code = 400, $message = 'error_occured')
     {
 
         $data = array(
@@ -255,7 +230,7 @@ class UserController extends Controller
     }
 
 
-    public function userProfileExist($key, $data)
+    public static function userProfileExist($key, $data)
     {
 
 

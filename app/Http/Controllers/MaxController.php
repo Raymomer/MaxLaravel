@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Contest;
 use Illuminate\Http\Request;
+use App\Http\Controllers\UserController;
 
 
 class MaxController extends Controller
@@ -24,8 +25,15 @@ class MaxController extends Controller
         $request->validate([
             'date' => 'required|date',
             'team' => 'nullable|string',
+            'token' => ['required'],
         ]);
 
+        $users = UserController::userProfileExist('token', $request->input('token'));
+
+        if (count($users) == 0) {
+
+            return UserController::error(400, "Token not found");
+        };
         $getDate = $request->input('date');
 
 
