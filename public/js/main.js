@@ -8,7 +8,7 @@ function submit() {
     // get vale from date and team 
     get['date'] = document.getElementById('fdate').value;
     get['team'] = document.getElementById('fteam').value;
-
+    get['token'] = localStorage.getItem('token');
 
     // set GET method parameter
     for (key in get) {
@@ -70,7 +70,7 @@ function show(payload) {
 }
 
 function colorTag(count) {
-    
+
     html = ""
 
     count.forEach(res => {
@@ -82,4 +82,29 @@ function colorTag(count) {
     })
 
     return html
+}
+
+
+function logout() {
+
+
+    console.log("Clear now")
+
+
+    $.ajax({
+        url: 'http://127.0.0.1:8000/Max/api/user/logout?',
+        method: 'POST',
+        data: {
+            token: localStorage.getItem('token')
+        }
+    }).done(res => {
+        console.log(res)
+        console.log('remove token')
+    })
+
+
+    localStorage.removeItem('token');
+    location.href = 'http://127.0.0.1:8000/Max/login';
+
+
 }

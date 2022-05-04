@@ -8,9 +8,15 @@ use Illuminate\Http\Request;
 use App\User;
 
 
-class UserController extends Controller
+class  UserController extends Controller
 {
     use \App\Http\Traits\UsesUuid;
+
+
+    public function login(Request $request)
+    {
+        return view('login');
+    }
 
 
 
@@ -90,9 +96,9 @@ class UserController extends Controller
                 $update = $user->where('token', $request->input('token'))->update($payload);
 
                 // update token failed
-                if ($update == false) {
-                    return $this->error(400, $message = 'Token not found');
-                }
+                // if ($update == false) {
+                //     return $this->error(400, $message = 'Token not found');
+                // }
             } catch (QueryException $e) {
                 return $this->error(400, $message = 'Update error');
             }
@@ -166,19 +172,19 @@ class UserController extends Controller
 
         // user;s verify check
         $verifyUser = false;
-        $check = [];
+        $profile = [];
 
         // User hold token
         if ($request->input('token') != null) {
-            $check =  $this->userProfileExist('token', $request->input('token'));
+            $profile =  $this->userProfileExist('token', $request->input('token'));
 
-            if ($check != null) {
+            if ($profile != null) {
                 $verifyUser = true;
             }
         }
 
         if ($verifyUser) {
-            return response()->json(['status' => true, 'payload' => $check], 200);
+            return response()->json(['status' => true, 'payload' => $profile], 200);
         } else {
             return $this->error(400, "User have not login or no account.");
         }

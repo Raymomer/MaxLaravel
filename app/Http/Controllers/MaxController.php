@@ -19,7 +19,6 @@ class MaxController extends Controller
     public function dbRead(Request $request)
     {
 
-        $contest = new Contest;
 
 
         $request->validate([
@@ -28,12 +27,7 @@ class MaxController extends Controller
             'token' => ['required'],
         ]);
 
-        $users = UserController::userProfileExist('token', $request->input('token'));
 
-        if (count($users) == 0) {
-
-            return UserController::error(400, "Token not found");
-        };
         $getDate = $request->input('date');
 
 
