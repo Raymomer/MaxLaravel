@@ -41,6 +41,3 @@ Route::group(['prefix' => '/Max/api/user'], function () {
     Route::post('login', 'UserController@UserLogin');
 
 });
-
-
-

@@ -46,7 +46,7 @@ class FetchGames extends Command
     {
 
         $date = $this->argument('arg_date');
-        $result = $this->fetchService->Fetch(null, $date = $date);
+        $result = $this->fetchService->Fetch($date);
 
 
         return $result;

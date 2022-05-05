@@ -37,12 +37,15 @@ class MaxController extends Controller
         return response($result);
     }
 
-
-    // Catch data from  https://cp.zgzcw.com/lottery/jcplayvsForJsp.action?lotteryId=26&issue=   
-    public function FetchContest(Request $request = null, $date = null)
+    public function FetchContest(Request $request)
     {
 
-        $result = $this->dbRead->Fetch($request, $date);
+        $request->validate([
+            'date' => 'required|date',
+        ]);
+
+
+        $result = $this->dbRead->Fetch($request->date);
 
         return $result;
     }

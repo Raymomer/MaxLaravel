@@ -41,44 +41,35 @@ class DatabaseService
         return $dbData;
     }
 
-    public function Fetch(Request $request = null, $date = null)
+    public function Fetch($date)
     {
 
-        // print_r($date);
 
-        // return;
-        if (isset($_GET['date']) || $date != null) {
+        $url = "https://cp.zgzcw.com/lottery/jcplayvsForJsp.action?lotteryId=26&issue=$date";
 
-            $searchDate = isset($_GET['date']) ? $_GET['date'] : $date;
 
-            $url = "https://cp.zgzcw.com/lottery/jcplayvsForJsp.action?lotteryId=26&issue=$searchDate";
+        $str = file_get_contents($url);
+        $need =  $this->sub_table($str);
 
-            $str = file_get_contents($url);
-            $need =  $this->sub_table($str);
+        $re = "/<tr ?.*[\n \w\W]+?<\/tr>/";
+        preg_match_all($re, $need, $tr);
 
-            $re = '/(\d{4}\-\d{2}\-\d{2})星期./u';
-            preg_match($re, $need, $date);
+        $contestDetial = [];
 
-            if (count($date) == 0) {
-                echo "No data";
-            }
+        for ($i = 0; $i < count($tr[0]); $i++) {
+            $data = $this->catchDetial($tr[0][$i], $date);
 
-            $re = "/<tr ?.*[\n \w\W]+?<\/tr>/";
-            preg_match_all($re, $need, $tr);
-            for ($i = 0; $i < count($tr[0]); $i++) {
-                $err = $this->catchDetial($tr[0][$i], $date);
-
-                if ($err != null) {
-                    break;
-                }
-            }
-
-            return ("新增了" . count($tr[0]) . "筆資料");
-
-            // return count($tr[0]);
-        } else {
-            return ("Todat is bad day.");
+            array_push($contestDetial, $data);
         }
+
+        if (count($contestDetial) > 0) {
+
+            Contest::query()->insert($contestDetial);
+            return ("新增了" . count($tr[0]) . "筆資料");
+        }
+        return ("Not found any data");
+
+
     }
     private function sub_table($str)
     {
@@ -128,9 +119,10 @@ class DatabaseService
         $re = '/<td ?class="wh-7 b-l">[\w\W]+?(\d+\.\d+)[\w\W]+?(\d+\.\d+)<\/a>/';
         preg_match($re, $element, $count);
 
-        Contest::query()->insert([
+
+        return [
             'no' => $number[1],
-            'date' => $date[1],
+            'date' => $date,
             'type' => $competition[1],
             'time' => $time[1],
             'away_team' => $awayTeam[1],
@@ -138,6 +130,6 @@ class DatabaseService
             'lose' => $count[1],
             'win' => $count[2],
 
-        ]);
+        ];
     }
 }

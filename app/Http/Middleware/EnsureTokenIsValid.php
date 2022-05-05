@@ -24,24 +24,11 @@ class EnsureTokenIsValid
 
         try {
             $user = new User();
-            $profile = $user->where('token', $request->input('token'))->FirstOrfail();
+            $user->where('token', $request->input('token'))->FirstOrfail();
         } catch (\Exception $e) {
 
             return  report($e);
         }
-
-
-
-
-
-        // $profile = UserController::userProfileExist('token', $request->input('token'));
-
-        // if (count($profile) == 0) {
-        //     // return UserController::error(400, $message = "Token is not verify.");
-        //     // Handler::rend
-        //     return 0;
-        // }
-
         return $next($request);
     }
 }

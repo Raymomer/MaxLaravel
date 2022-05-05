@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Database\QueryException;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Services\UserService;
-use App\User;
+
 
 
 class  UserController extends Controller
@@ -34,6 +32,11 @@ class  UserController extends Controller
             'mail' => ['required']
         ]);
 
+        // $request->validate([
+        //     'account' => ['required', 'max:20'],
+        //     'password' => ['required', 'max:20'],
+        //     'mail' => ['required']
+        // ]);
 
         $result = $this->userTest->Create($request);
         return response($result);

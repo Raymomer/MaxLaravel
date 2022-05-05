@@ -98,12 +98,12 @@ class UserService
                 return ['status' => true];
             } catch (\Exception $e) {
                 return ['status' => false, 'message'  => "User's mail Exist"];
+                
             }
         } else {
             return ['status' => false, 'message'  => "User's account Exist"];
         }
     }
-
 
     public function Update(Request $request)
     {
