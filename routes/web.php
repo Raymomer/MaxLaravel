@@ -1,9 +1,5 @@
 <?php
 
-use App\Http\Controllers\MaxController;
-
-use App\Http\Controllers\UserController;
-
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,22 +19,28 @@ Route::post('/', function () {
 
 
 Route::get('/Max', 'MaxController@view')->name("max");
-// Route::get('/Max/api/db', 'MaxController@dbRead')->middleware('token.check');
-Route::get('/Max/api/insert', 'MaxController@fetch');
-Route::get('/Max/store', 'MaxController@store');
+Route::get('/Max/api/insert', 'MaxController@FetchContest');
+// Route::get('/Max/store', 'MaxController@store');
 
 Route::group(['middleware' => ['token.check']], function () {
 
     Route::get('/Max/api/db', 'MaxController@dbRead');
-    Route::post('/Max/api/user/update', 'UserController@userUpdate');
-    Route::post('/Max/api/user/logout', 'UserController@userLogout');
+    Route::post('/Max/api/user/update', 'UserController@UserUpdate');
+    Route::post('/Max/api/user/logout', 'UserController@UserLogout');
 });
 
-Route::get('/Max/login', 'UserController@login');
-Route::post('/Max/api/user/create', 'UserController@userCreate');
-// Route::post('/Max/api/user/update', 'UserController@userUpdate')->middleware('token.check');
-Route::post('/Max/api/user/profile', 'UserController@userProfile');
-Route::post('/Max/api/user/login', 'UserController@userLogin');
-// Route::post('/Max/api/user/logout', 'UserController@userLogout')->middleware('token.check');
 
-// Route::post('/Max/api/user/login', 'UserController@index');
+Route::get('/Max/login', function () {
+    return view('login');
+});
+
+Route::group(['prefix' => '/Max/api/user'], function () {
+
+    Route::post('create', 'UserController@UserCreate');
+    Route::post('profile', 'UserController@UserProfile');
+    Route::post('login', 'UserController@UserLogin');
+
+});
+
+
+

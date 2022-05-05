@@ -1,4 +1,11 @@
 
+$(document).ready(function () {
+
+    localStorage.getItem('token') == null ? location.href = 'http://127.0.0.1:8000/Max/login' : null;
+
+})
+
+
 function submit() {
 
     var url = "http://127.0.0.1:8000/Max/api/db?"
@@ -22,7 +29,6 @@ function submit() {
         contentType: "application/x-www-form-urlencoded;charset=utf-8",
         success: function (response) {
 
-            console.log(response.errors)
             if (response.errors === undefined) {
                 show(response)
             } else {
@@ -98,13 +104,12 @@ function logout() {
             token: localStorage.getItem('token')
         }
     }).done(res => {
-        console.log(res)
-        console.log('remove token')
+
+        localStorage.removeItem('token');
+        location.href = 'http://127.0.0.1:8000/Max/login';
     })
 
 
-    localStorage.removeItem('token');
-    location.href = 'http://127.0.0.1:8000/Max/login';
 
 
 }

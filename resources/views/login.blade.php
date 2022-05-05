@@ -14,13 +14,19 @@
     <div class="form-group row justify-content-center ">
         <label for="inputAccount" class="col-2 col-form-label">Account</label>
         <div class="col-6">
-            <input type="text" class="form-control" id="inputAccount">
+            <input type="text" class="form-control" id="inputAccount" placeholder="Account">
         </div>
     </div>
     <div class="form-group row justify-content-center">
         <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
         <div class="col-sm-6">
             <input type="password" class="form-control" id="inputPassword" placeholder="Password">
+        </div>
+    </div>
+    <div class="form-group row justify-content-center">
+        <label for="inputMail" class="col-sm-2 col-form-label">Mail</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" id="inputMail" placeholder="E-mail">
         </div>
     </div>
 

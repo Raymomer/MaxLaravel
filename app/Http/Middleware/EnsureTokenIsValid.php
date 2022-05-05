@@ -25,7 +25,6 @@ class EnsureTokenIsValid
         try {
             $user = new User();
             $profile = $user->where('token', $request->input('token'))->FirstOrfail();
-            dd($profile);
         } catch (\Exception $e) {
 
             return  report($e);
