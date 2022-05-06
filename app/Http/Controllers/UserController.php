@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\UserService;
-
+use App\Exceptions\CommonException;
 
 
 class  UserController extends Controller
@@ -23,20 +23,13 @@ class  UserController extends Controller
 
     public function UserCreate(Request $request)
     {
-
-
         // account, password required
         $request->validateWithBag('post', [
             'account' => ['required', 'max:20'],
             'password' => ['required', 'max:20'],
-            'mail' => ['required']
+            'mail' => ['required'],
         ]);
 
-        // $request->validate([
-        //     'account' => ['required', 'max:20'],
-        //     'password' => ['required', 'max:20'],
-        //     'mail' => ['required']
-        // ]);
 
         $result = $this->userTest->Create($request);
         return response($result);
@@ -51,6 +44,7 @@ class  UserController extends Controller
             'password',
             'mail',
             'expiry',
+            'refreshToken' => ["integer". 'in:0,1'],
         ]);
 
 

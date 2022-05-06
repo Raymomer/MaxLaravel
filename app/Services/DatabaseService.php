@@ -4,9 +4,7 @@ namespace App\Services;
 
 use App\Contest;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redis;
-use Illuminate\Support\Str;
-use Illuminate\Database\QueryException;
+
 
 
 class DatabaseService

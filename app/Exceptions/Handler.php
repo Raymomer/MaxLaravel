@@ -13,7 +13,7 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $dontReport = [
-        //
+        CommonException::class,
     ];
 
     /**
@@ -36,7 +36,6 @@ class Handler extends ExceptionHandler
      */
     public function report(Throwable $exception)
     {
-
         parent::report($exception);
     }
 

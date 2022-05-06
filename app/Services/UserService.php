@@ -6,8 +6,9 @@ namespace App\Services;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Illuminate\Database\QueryException;
 
+
+use App\Exceptions\CommonException;
 
 
 class UserService
@@ -15,6 +16,7 @@ class UserService
 
     public function Login(Request $request)
     {
+
 
         // Check user's account exist
         $users = $this->checkUserExist($request->all());
@@ -75,33 +77,36 @@ class UserService
         if ($verifyUser) {
             return ['status' => true, 'payload' => $profile];
         } else {
-            return  ['staus' => false, 'message' => "User have not login or no account."];
+            throw new CommonException(400, "User have not login or no accountrrr.");
+            // return  ['staus' => false, 'message' => "User have not login or no account."];
         }
     }
 
     public function Create(Request $request)
     {
         //check User Exist and reutnr profile
-        $check = $this->userProfileExist('user_account', $request->input('account'));
+        $accountCheck = $this->userProfileExist('user_account', $request->input('account'));
 
-        // no User in db
-        if (count($check) == 0) {
+        $mailCheck = $this->userProfileExist('user_mail', $request->input('mail'));
 
-            try {
-                $user = new User;
-                $user->user_account = $request->input('account');
-                $user->user_password = $request->input('password');
-                $user->user_mail = $request->input('mail');
+        if (count($accountCheck) > 0 || count($mailCheck) > 0) {
+            throw new CommonException(400, 'User\'s account or mail is  Exist');
+            // return ['status' => false, 'message'  => "User's account or mail is  Exist"];
+        }
 
-                $user->save();
 
-                return ['status' => true];
-            } catch (\Exception $e) {
-                return ['status' => false, 'message'  => "User's mail Exist"];
-                
-            }
-        } else {
-            return ['status' => false, 'message'  => "User's account Exist"];
+
+        try {
+            $user = new User;
+            $user->user_account = $request->input('account');
+            $user->user_password = $request->input('password');
+            $user->user_mail = $request->input('mail');
+
+            $user->save();
+
+            return ['status' => true];
+        } catch (\Exception $e) {
+            throw new CommonException(400, $e->getMessage());
         }
     }
 
@@ -121,8 +126,24 @@ class UserService
                 case 'expiry':
                     $payload['expiry'] = $value;
                     break;
-            };
-        };
+            }
+        }
+
+        if ($request->password) {
+            $payload['user_password'] = $request->password;
+        }
+
+        if ($request->mail) {
+            $payload['user_mail'] = $request->mail;
+        }
+
+        if ($request->expiry) {
+            $payload['expiry'] = $request->expiry;
+        }
+
+        if (!count($payload)) {
+            return;
+        }
 
         // Get new token
         $payload['token'] = Str::uuid()->toString();
@@ -132,8 +153,10 @@ class UserService
         if (count($payload) > 0) {
             try {
                 $user->where('token', $request->input('token'))->update($payload);
-            } catch (QueryException $e) {
-                return ['status' => false, 'message'  => "Update error"];
+
+                // dd($udpate);
+            } catch (\Exception $e) {
+                throw new CommonException(400, $e->getMessage());
             }
 
 

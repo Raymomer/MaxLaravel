@@ -4,14 +4,15 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use App\Http\Controllers\UserController;
-
-use App\Exceptions\Handler;
 use App\User;
-use Symfony\Component\HttpKernel\Profiler\Profile;
+use App\Exceptions\CommonException;
+
+
 
 class EnsureTokenIsValid
 {
+
+
     /**
      * Handle an incoming request.
      *
@@ -27,7 +28,7 @@ class EnsureTokenIsValid
             $user->where('token', $request->input('token'))->FirstOrfail();
         } catch (\Exception $e) {
 
-            return  report($e);
+            throw new CommonException(400, $e->getMessage());
         }
         return $next($request);
     }
