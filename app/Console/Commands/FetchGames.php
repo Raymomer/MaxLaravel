@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Services\DatabaseService;
+use App\Services\ContestService;
 
 class FetchGames extends Command
 
@@ -31,7 +31,7 @@ class FetchGames extends Command
      *
      * @return void
      */
-    public function __construct(DatabaseService $fetchService)
+    public function __construct(ContestService $fetchService)
     {
         parent::__construct();
         $this->fetchService = $fetchService;

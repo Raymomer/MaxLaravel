@@ -91,7 +91,6 @@ class UserService
 
         if (count($accountCheck) > 0 || count($mailCheck) > 0) {
             throw new CommonException(400, 'User\'s account or mail is  Exist');
-            // return ['status' => false, 'message'  => "User's account or mail is  Exist"];
         }
 
 
@@ -114,20 +113,6 @@ class UserService
     {
 
         $payload = [];
-
-        foreach ($request->all() as $key => $value) {
-            switch ($key) {
-                case 'password':
-                    $payload['user_password'] = $value;
-                    break;
-                case 'mail':
-                    $payload['user_mail'] = $value;
-                    break;
-                case 'expiry':
-                    $payload['expiry'] = $value;
-                    break;
-            }
-        }
 
         if ($request->password) {
             $payload['user_password'] = $request->password;
@@ -185,17 +170,5 @@ class UserService
         $users = $user->where('user_account', $response['account'])->where('user_password', $response['password'])->get()->toArray();
 
         return $users;
-    }
-
-    public static  function error($code = 400, $message = 'error_occured')
-    {
-
-        $data = array(
-            'status' => false,
-            'code' => $code,
-            'message' => $message
-        );
-
-        return [$data];
     }
 }

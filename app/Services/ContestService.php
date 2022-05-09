@@ -4,11 +4,30 @@ namespace App\Services;
 
 use App\Contest;
 use Illuminate\Http\Request;
+use GuzzleHttp;
 
 
-
-class DatabaseService
+class ContestService
 {
+
+    public function listContest(Request $request)
+    {
+        // $getDate = $request->input('date');
+
+
+
+
+        $dbData = Contest::paginate($request->input('limit'))->toArray();
+
+        $response = [
+            'current_page' => $dbData['current_page'],
+            'data' => $dbData['data'],
+            'per_page' => $dbData['per_page'],
+            'total' => $dbData['total']
+        ];
+
+        return $response;
+    }
     public function DbRead(Request $request)
     {
         $getDate = $request->input('date');
@@ -28,8 +47,8 @@ class DatabaseService
                 }
             )->get()->toArray();
         } else {
-            //select db with date value
 
+            //select db with date value
             $dbData = Contest::query()->whereDate('date', 'like',  $getDate  . '%')->get()->toArray();
         }
 
@@ -44,9 +63,17 @@ class DatabaseService
 
 
         $url = "https://cp.zgzcw.com/lottery/jcplayvsForJsp.action?lotteryId=26&issue=$date";
+        $client = new GuzzleHttp\Client();
 
 
-        $str = file_get_contents($url);
+        $response = $client->request('get', $url, [
+            'headers' => [
+                'X-Requested-With' => 'XMLHttpRequest'
+            ]
+
+        ]);
+
+        $str = (string) $response->getBody()->getContents();
         $need =  $this->sub_table($str);
 
         $re = "/<tr ?.*[\n \w\W]+?<\/tr>/";
@@ -66,8 +93,6 @@ class DatabaseService
             return ("新增了" . count($tr[0]) . "筆資料");
         }
         return ("Not found any data");
-
-
     }
     private function sub_table($str)
     {

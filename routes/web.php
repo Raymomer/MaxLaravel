@@ -29,6 +29,7 @@ Route::group(['middleware' => ['token.check']], function () {
     Route::post('/Max/api/user/logout', 'UserController@UserLogout');
 });
 
+Route::get('/Max/api/db/list', 'MaxController@dbList');
 
 Route::get('/Max/login', function () {
     return view('login');
@@ -39,5 +40,4 @@ Route::group(['prefix' => '/Max/api/user'], function () {
     Route::post('create', 'UserController@UserCreate');
     Route::post('profile', 'UserController@UserProfile');
     Route::post('login', 'UserController@UserLogin');
-
 });

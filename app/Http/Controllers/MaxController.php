@@ -4,18 +4,18 @@ namespace App\Http\Controllers;
 
 
 use Illuminate\Http\Request;
-use App\Services\DatabaseService;
+use App\Services\ContestService;
 
 
 class MaxController extends Controller
 {
 
-    protected $dbRead;
+    protected $contestSerive;
 
 
-    public function __construct(DatabaseService $dbRead)
+    public function __construct(ContestService $contestSerive)
     {
-        $this->dbRead = $dbRead;
+        $this->contestSerive = $contestSerive;
     }
 
     public function view(Request $request)
@@ -32,10 +32,25 @@ class MaxController extends Controller
             'token' => ['required'],
         ]);
 
-        $result = $this->dbRead->DbRead($request);
+        $result = $this->contestSerive->DbRead($request);
 
         return response($result);
     }
+
+    public function dbList(Request $request)
+    {
+        $request->validate([
+            'date' => 'required|date',
+            'team' => 'nullable|string',
+            'token' => ['required'],
+            'limit' => 'required',
+        ]);
+
+        $result = $this->contestSerive->listContest($request);
+
+        return response($result);
+    }
+
 
     public function FetchContest(Request $request)
     {
@@ -45,7 +60,7 @@ class MaxController extends Controller
         ]);
 
 
-        $result = $this->dbRead->Fetch($request->date);
+        $result = $this->contestSerive->Fetch($request->date);
 
         return $result;
     }
