@@ -29,10 +29,11 @@ class MaxController extends Controller
         $request->validate([
             'date' => 'required|date',
             'team' => 'nullable|string',
+            'limit',
             'token' => ['required'],
         ]);
 
-        $result = $this->contestSerive->DbRead($request);
+        $result = $this->contestSerive->readDbContest($request);
 
         return response($result);
     }
@@ -40,8 +41,6 @@ class MaxController extends Controller
     public function dbList(Request $request)
     {
         $request->validate([
-            'date' => 'required|date',
-            'team' => 'nullable|string',
             'token' => ['required'],
             'limit' => 'required',
         ]);
@@ -60,7 +59,7 @@ class MaxController extends Controller
         ]);
 
 
-        $result = $this->contestSerive->Fetch($request->date);
+        $result = $this->contestSerive->fetchContest($request->date);
 
         return $result;
     }

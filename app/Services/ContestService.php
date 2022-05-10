@@ -28,9 +28,12 @@ class ContestService
 
         return $response;
     }
-    public function DbRead(Request $request)
+    public function readDbContest(Request $request)
     {
         $getDate = $request->input('date');
+
+        $defaultLimit = $request->input('limit') == null ? 15 : $request->input('limit');
+
 
 
         if ($request->input('team') !== null) {
@@ -45,33 +48,32 @@ class ContestService
 
                     $query->where('away_team', 'like', '%' . $getTeam . '%')->orwhere('home_team', 'like', '%' .  $getTeam  . '%');
                 }
-            )->get()->toArray();
+            )->paginate($defaultLimit)->toArray();
         } else {
 
             //select db with date value
-            $dbData = Contest::query()->whereDate('date', 'like',  $getDate  . '%')->get()->toArray();
+            $dbData = Contest::query()->whereDate('date', 'like',  $getDate  . '%')->paginate($defaultLimit)->toArray();
         }
 
 
+        $response = [
+            'current_page' => $dbData['current_page'],
+            'data' => $dbData['data'],
+            'per_page' => $dbData['per_page'],
+            'total' => $dbData['total']
+        ];
 
-        // header X-Requested-With -> XMLHttpRequest
-        return $dbData;
+        return $response;
     }
 
-    public function Fetch($date)
+    public function fetchContest($date)
     {
 
 
         $url = "https://cp.zgzcw.com/lottery/jcplayvsForJsp.action?lotteryId=26&issue=$date";
         $client = new GuzzleHttp\Client();
 
-
-        $response = $client->request('get', $url, [
-            'headers' => [
-                'X-Requested-With' => 'XMLHttpRequest'
-            ]
-
-        ]);
+        $response = $client->request('get', $url, []);
 
         $str = (string) $response->getBody()->getContents();
         $need =  $this->sub_table($str);
